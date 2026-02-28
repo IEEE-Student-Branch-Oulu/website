@@ -22,7 +22,7 @@ const navLinks: NavLink[] = [
   { label: 'Home', to: '/', exact: true },
   { label: 'About', to: '/#' },
   { label: 'Events', to: '/events' },
-  { label: 'News', to: '/#' },
+  { label: 'News', to: '/blog' },
 ]
 
 const socialLinks = [

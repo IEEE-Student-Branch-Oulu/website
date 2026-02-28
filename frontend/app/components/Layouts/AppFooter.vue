@@ -18,7 +18,7 @@ const navLinks = [
   { label: 'Home', to: '/' },
   { label: 'About', to: '/#' },
   { label: 'Events', to: '/events' },
-  { label: 'News', to: '/#' },
+  { label: 'News', to: '/blog' },
 ]
 
 const universityLinks = [

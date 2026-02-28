@@ -9,50 +9,10 @@
  * TODO: Replace with `useFetch('/api/v1/posts?limit=3')` when API is ready.
  */
 
-import type { BlogPost } from '~/components/blog/BlogCard.vue'
+import { DUMMY_POSTS } from '~/composables/useBlog'
 
 // ── Dummy data — replace with API call ───────────────────────
-const posts: BlogPost[] = [
-  {
-    id: 1,
-    title: 'How We Built a Radar System with GNU Radio and a $20 SDR Dongle',
-    slug: 'gnu-radio-sdr-radar-workshop',
-    excerpt:
-      'At our February workshop, 18 students built a working radar that could detect passing objects using nothing but an RTL-SDR dongle, GNU Radio, and a lot of caffeine.',
-    author: 'Juhani Virtanen',
-    authorInitials: 'JV',
-    date: 'Feb 12, 2026',
-    category: 'Workshop Recap',
-    categoryVariant: 'blue',
-    readTime: '6 min read',
-  },
-  {
-    id: 2,
-    title: 'Linux Ricing for Engineers: A Practical Guide to a Actually Usable Terminal',
-    slug: 'linux-ricing-guide-engineers',
-    excerpt:
-      "Your dev environment should be as well-engineered as your code. Here's how to set up a fast, beautiful terminal workflow with Neovim, tmux, and a tiling WM — without losing a week to dotfiles.",
-    author: 'Mikael Korhonen',
-    authorInitials: 'MK',
-    date: 'Feb 3, 2026',
-    category: 'Tutorial',
-    categoryVariant: 'green',
-    readTime: '11 min read',
-  },
-  {
-    id: 3,
-    title: 'IEEE Oulu Wins Best Student Branch Activity Award at Finland Section Annual Meeting',
-    slug: 'ieee-oulu-best-activity-award-2025',
-    excerpt:
-      'At the IEEE Finland Section Annual Meeting in Helsinki, the Oulu Student Branch was recognised for outstanding technical activity and membership growth in 2025.',
-    author: 'IEEE Oulu Board',
-    authorInitials: 'IB',
-    date: 'Feb 1, 2026',
-    category: 'Branch News',
-    categoryVariant: 'orange',
-    readTime: '3 min read',
-  },
-]
+const posts = DUMMY_POSTS.slice(0, 3)
 
 const { el, isVisible } = useReveal()
 </script>
@@ -79,7 +39,7 @@ const { el, isVisible } = useReveal()
         />
 
         <NuxtLink
-          to="/#"
+          to="/blog"
           class="inline-flex flex-shrink-0 items-center gap-2 whitespace-nowrap text-sm font-medium text-[var(--color-ieee-blue)] transition-colors duration-150 hover:text-[var(--color-ieee-blue-light)] focus-visible:underline focus-visible:outline-none"
         >
           View all posts
