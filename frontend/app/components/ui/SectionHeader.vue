@@ -10,8 +10,17 @@
  *   title    - main section heading
  *   subtitle - optional descriptive text below the title
  *   align    - 'left' (default) | 'center'
+ *   level    - 1 | 2 — controls the heading tag and text size
+ *              level 1 renders <h1> with larger text (for page headings)
+ *              level 2 renders <h2> with standard text (for sections)
  *
  * Usage:
+ *   <SectionHeader
+ *     eyebrow="IEEE Oulu · Events"
+ *     title="Events & Meetups"
+ *     subtitle="Workshops, tech talks, hackathons, and socials."
+ *     :level="1"
+ *   />
  *   <SectionHeader
  *     eyebrow="Latest from the blog"
  *     title="Infodumps & News"
@@ -24,9 +33,10 @@ interface Props {
   title: string
   subtitle?: string
   align?: 'left' | 'center'
+  level?: 1 | 2
 }
 
-withDefaults(defineProps<Props>(), { align: 'left' })
+withDefaults(defineProps<Props>(), { align: 'left', level: 2 })
 </script>
 
 <template>
@@ -40,9 +50,15 @@ withDefaults(defineProps<Props>(), { align: 'left' })
     </p>
 
     <!-- Title -->
-    <h2 class="text-2xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-3xl">
+    <component
+      :is="level === 1 ? 'h1' : 'h2'"
+      :class="[
+        'font-bold tracking-tight text-[var(--color-text-primary)]',
+        level === 1 ? 'text-4xl sm:text-5xl' : 'text-2xl sm:text-3xl',
+      ]"
+    >
       {{ title }}
-    </h2>
+    </component>
 
     <!-- Subtitle -->
     <p

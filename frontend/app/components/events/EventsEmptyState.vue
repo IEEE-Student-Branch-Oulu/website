@@ -5,6 +5,10 @@
  * Shown when filters return no events.
  * Provides a clear, friendly path back to all events.
  *
+ * Uses:
+ *   - UiBaseCard for the container
+ *   - UiBaseButton for the reset action
+ *
  * Props:
  *   activeFilter - current filter key (for contextual message)
  *
@@ -22,8 +26,9 @@ defineEmits<{ reset: [] }>()
 </script>
 
 <template>
-  <div
-    class="flex flex-col items-center justify-center rounded-xl border border-dashed border-[var(--color-border)] px-4 py-20 text-center"
+  <UiBaseCard
+    padding="none"
+    class="flex flex-col items-center justify-center border-dashed px-4 py-20 text-center"
   >
     <!-- Icon -->
     <div
@@ -53,11 +58,7 @@ defineEmits<{ reset: [] }>()
       Try a different filter or check back later for new events.
     </p>
 
-    <button
-      type="button"
-      class="inline-flex items-center gap-2 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-overlay)] px-4 py-2 text-sm font-medium text-[var(--color-text-primary)] transition-all duration-150 hover:bg-[var(--color-surface-raised)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ieee-blue)]"
-      @click="$emit('reset')"
-    >
+    <UiBaseButton variant="secondary" size="sm" @click="$emit('reset')">
       <svg
         class="size-4"
         viewBox="0 0 24 24"
@@ -70,6 +71,6 @@ defineEmits<{ reset: [] }>()
         <path stroke-linecap="round" d="M3 3v5h5" />
       </svg>
       Show all events
-    </button>
-  </div>
+    </UiBaseButton>
+  </UiBaseCard>
 </template>

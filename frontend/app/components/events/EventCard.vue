@@ -11,6 +11,12 @@
  *   - Past: slightly muted, "View Recap" CTA if available
  *   - Featured/highlighted events get a subtle top glow
  *
+ * Uses:
+ *   - UiBaseCard for the card shell
+ *   - UiBaseBadge for type/status badges and tags
+ *   - UiBaseButton for RSVP CTA
+ *   - UiBaseLink for location links
+ *
  * Props:
  *   event - EventItem object
  *   index - position in list (for stagger animation)
@@ -65,15 +71,16 @@ const isPast = computed(() => props.event.status === 'past')
       aria-hidden="true"
     />
 
-    <!-- Card shell -->
-    <div
+    <!-- Card shell — uses UiBaseCard for consistent styling -->
+    <UiBaseCard
+      as="div"
+      padding="none"
+      :hoverable="!isPast"
       :class="[
-        'relative flex overflow-hidden rounded-xl border transition-all duration-200',
-        isPast
-          ? 'border-[var(--color-border)] bg-[var(--color-surface)] opacity-75 hover:opacity-100'
-          : 'hover:border-[var(--color-ieee-blue)]/40 border-[var(--color-border)] bg-[var(--color-surface)] hover:-translate-y-0.5 hover:shadow-lg',
+        'relative overflow-hidden',
+        isPast && 'opacity-75 hover:opacity-100',
         event.isHighlighted && !isPast && 'border-[var(--color-ieee-blue)]/25',
-        compact ? 'flex-row items-stretch' : 'flex-col',
+        compact ? 'flex flex-row items-stretch' : 'flex flex-col',
       ]"
     >
       <!-- Left accent stripe -->
@@ -185,33 +192,29 @@ const isPast = computed(() => props.event.status === 'past')
             </svg>
             <dt class="sr-only">Location</dt>
             <dd class="truncate text-xs text-[var(--color-text-secondary)]">
-              <a
+              <UiBaseLink
                 v-if="event.locationUrl"
                 :href="event.locationUrl"
-                target="_blank"
-                rel="noopener noreferrer"
+                external
                 class="transition-colors duration-150 hover:text-[var(--color-ieee-blue)] hover:underline focus-visible:underline focus-visible:outline-none"
                 @click.stop
-                >{{ event.location }}</a
               >
+                {{ event.location }}
+              </UiBaseLink>
               <span v-else>{{ event.location }}</span>
             </dd>
           </div>
         </dl>
 
-        <!-- Tags -->
+        <!-- Tags — rendered as BaseBadge for consistency -->
         <div
           v-if="event.tags.length && !compact"
           class="mb-5 flex flex-wrap gap-1.5"
           aria-label="Tags"
         >
-          <span
-            v-for="tag in event.tags"
-            :key="tag"
-            class="rounded border border-[var(--color-border)] px-1.5 py-0.5 font-mono text-[10px] text-[var(--color-text-muted)]"
-          >
+          <UiBaseBadge v-for="tag in event.tags" :key="tag" variant="default" size="sm">
             #{{ tag.toLowerCase().replace(/\s/g, '-') }}
-          </span>
+          </UiBaseBadge>
         </div>
 
         <!-- Footer: spots left + CTA -->
@@ -254,11 +257,13 @@ const isPast = computed(() => props.event.status === 'past')
 
           <div v-else class="flex-1" />
 
-          <!-- CTA -->
-          <NuxtLink
+          <!-- CTA: Past → View recap link -->
+          <UiBaseButton
             v-if="isPast"
-            :to="`/events/${event.slug}`"
-            class="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--color-text-secondary)] transition-colors duration-150 hover:text-[var(--color-text-primary)] focus-visible:underline focus-visible:outline-none"
+            variant="ghost"
+            size="sm"
+            :href="`/events/${event.slug}`"
+            class="!gap-1.5 !px-2"
           >
             View recap
             <svg
@@ -271,20 +276,15 @@ const isPast = computed(() => props.event.status === 'past')
             >
               <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7" />
             </svg>
-          </NuxtLink>
+          </UiBaseButton>
 
-          <a
+          <!-- CTA: Upcoming with RSVP link → Primary RSVP button -->
+          <UiBaseButton
             v-else-if="event.rsvpLink"
+            variant="primary"
+            size="sm"
             :href="event.rsvpLink"
-            target="_blank"
-            rel="noopener noreferrer"
-            :class="[
-              'inline-flex items-center gap-1.5 rounded-lg px-4 py-1.5 text-xs font-semibold',
-              'bg-[var(--color-ieee-blue)] text-white',
-              'hover:bg-[var(--color-ieee-blue-light)] active:bg-[var(--color-ieee-blue-dark)]',
-              'transition-all duration-150',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ieee-blue)] focus-visible:ring-offset-2',
-            ]"
+            external
             @click.stop
           >
             RSVP
@@ -298,12 +298,15 @@ const isPast = computed(() => props.event.status === 'past')
             >
               <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
             </svg>
-          </a>
+          </UiBaseButton>
 
-          <NuxtLink
+          <!-- CTA: Upcoming without RSVP → Details link -->
+          <UiBaseButton
             v-else
-            :to="`/events/${event.slug}`"
-            class="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--color-ieee-blue)] transition-colors duration-150 hover:text-[var(--color-ieee-blue-light)] focus-visible:underline focus-visible:outline-none"
+            variant="ghost"
+            size="sm"
+            :href="`/events/${event.slug}`"
+            class="!gap-1.5 !px-2 !text-[var(--color-ieee-blue)] hover:!text-[var(--color-ieee-blue-light)]"
           >
             Details
             <svg
@@ -316,9 +319,9 @@ const isPast = computed(() => props.event.status === 'past')
             >
               <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7" />
             </svg>
-          </NuxtLink>
+          </UiBaseButton>
         </div>
       </div>
-    </div>
+    </UiBaseCard>
   </article>
 </template>

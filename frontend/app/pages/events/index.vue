@@ -4,7 +4,7 @@
  *
  * Layout:
  *   ┌─────────────────────────────────────────┐
- *   │  Page header + stats                    │
+ *   │  Page header (UiSectionHeader) + stats  │
  *   ├─────────────────────────────────────────┤
  *   │  FilterBar                              │
  *   ├──────────────────────┬──────────────────┤
@@ -17,6 +17,12 @@
  *
  * On mobile: stacks vertically, calendar below filter.
  * Upcoming events always render before past events in the list.
+ *
+ * Uses:
+ *   - UiSectionHeader for the page heading (eyebrow + title + subtitle)
+ *   - UiBaseCard for sidebar boxes (quick links, event type legend)
+ *   - UiBaseLink for sidebar quick links (internal + external)
+ *   - UiBaseBadge for section count indicators
  */
 
 import {
@@ -97,25 +103,14 @@ const { el: headerEl, isVisible: headerVisible } = useReveal(0.1)
             transform: headerVisible ? 'translateY(0)' : 'translateY(12px)',
           }"
         >
-          <!-- Eyebrow -->
-          <p
-            class="mb-4 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-ieee-blue)]"
-          >
-            IEEE Oulu · Events
-          </p>
-
           <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <h1
-                class="mb-3 text-4xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-5xl"
-              >
-                Events & Meetups
-              </h1>
-              <p class="max-w-lg text-base text-[var(--color-text-secondary)]">
-                Workshops, tech talks, hackathons, and socials. All open to University of Oulu
-                students.
-              </p>
-            </div>
+            <!-- Section header — reusable component -->
+            <UiSectionHeader
+              eyebrow="IEEE Oulu · Events"
+              title="Events & Meetups"
+              subtitle="Workshops, tech talks, hackathons, and socials. All open to University of Oulu students."
+              :level="1"
+            />
 
             <!-- Stats -->
             <dl class="flex flex-shrink-0 gap-8">
@@ -240,20 +235,17 @@ const { el: headerEl, isVisible: headerVisible } = useReveal(0.1)
             <!-- Calendar placeholder -->
             <EventsCalendarPlaceholder />
 
-            <!-- Quick links box -->
-            <div
-              class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-5"
-            >
+            <!-- Quick links box — uses UiBaseCard + UiBaseLink -->
+            <UiBaseCard padding="sm" flat>
               <p
-                class="mb-4 font-mono text-[10px] uppercase tracking-widest text-[var(--color-text-muted)]"
+                class="mb-4 px-1 font-mono text-[10px] uppercase tracking-widest text-[var(--color-text-muted)]"
               >
                 Quick Links
               </p>
-              <div class="flex flex-col gap-2">
-                <a
+              <div class="flex flex-col gap-1">
+                <UiBaseLink
                   href="https://discord.gg/your-server"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  external
                   class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-[var(--color-text-secondary)] transition-all duration-150 hover:bg-[var(--color-surface-overlay)] hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ieee-blue)]"
                 >
                   <svg
@@ -267,11 +259,10 @@ const { el: headerEl, isVisible: headerVisible } = useReveal(0.1)
                     />
                   </svg>
                   Get notified on Discord
-                </a>
-                <a
+                </UiBaseLink>
+                <UiBaseLink
                   href="https://t.me/your-channel"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  external
                   class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-[var(--color-text-secondary)] transition-all duration-150 hover:bg-[var(--color-surface-overlay)] hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ieee-blue)]"
                 >
                   <svg
@@ -285,8 +276,8 @@ const { el: headerEl, isVisible: headerVisible } = useReveal(0.1)
                     />
                   </svg>
                   Follow on Telegram
-                </a>
-                <NuxtLink
+                </UiBaseLink>
+                <UiBaseLink
                   to="/about"
                   class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-[var(--color-text-secondary)] transition-all duration-150 hover:bg-[var(--color-surface-overlay)] hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ieee-blue)]"
                 >
@@ -302,20 +293,18 @@ const { el: headerEl, isVisible: headerVisible } = useReveal(0.1)
                     <path stroke-linecap="round" d="M12 8h.01M12 12v4" />
                   </svg>
                   About IEEE Oulu
-                </NuxtLink>
+                </UiBaseLink>
               </div>
-            </div>
+            </UiBaseCard>
 
-            <!-- Type legend -->
-            <div
-              class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-5"
-            >
+            <!-- Type legend — uses UiBaseCard -->
+            <UiBaseCard padding="sm" flat>
               <p
-                class="mb-4 font-mono text-[10px] uppercase tracking-widest text-[var(--color-text-muted)]"
+                class="mb-4 px-1 font-mono text-[10px] uppercase tracking-widest text-[var(--color-text-muted)]"
               >
                 Event Types
               </p>
-              <dl class="flex flex-col gap-2.5">
+              <dl class="flex flex-col gap-2.5 px-1">
                 <div
                   v-for="(meta, type) in EVENT_TYPE_META"
                   :key="type"
@@ -329,7 +318,7 @@ const { el: headerEl, isVisible: headerVisible } = useReveal(0.1)
                   <dd class="text-xs text-[var(--color-text-secondary)]">{{ meta.label }}</dd>
                 </div>
               </dl>
-            </div>
+            </UiBaseCard>
           </div>
         </aside>
       </div>

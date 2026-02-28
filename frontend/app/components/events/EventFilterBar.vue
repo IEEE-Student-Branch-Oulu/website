@@ -5,6 +5,14 @@
  * Filter controls for the events page.
  * Looks like an IDE tab strip — matches the engineering aesthetic.
  *
+ * Uses:
+ *   - UiBaseBadge for count indicators (consistent badge styling)
+ *
+ * Note: Status and type filter buttons are kept as raw <button> elements
+ * because they form a segmented control / radio group pattern that is
+ * fundamentally different from action buttons. Forcing UiBaseButton here
+ * would require excessive overrides and reduce maintainability.
+ *
  * Props:
  *   modelValue - currently active filter key
  *   counts     - { upcoming: number, past: number } for the badges
@@ -64,7 +72,7 @@ function select(key: EventFilter) {
 
 <template>
   <div class="flex flex-col gap-3">
-    <!-- Row 1: Status filters -->
+    <!-- Row 1: Status filters (segmented control) -->
     <div
       class="inline-flex w-fit items-center gap-0.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-1"
       role="radiogroup"
@@ -87,18 +95,15 @@ function select(key: EventFilter) {
       >
         {{ f.label }}
 
-        <!-- Count badge -->
-        <span
+        <!-- Count badge — uses UiBaseBadge for consistent styling -->
+        <UiBaseBadge
           v-if="counts[f.key] !== undefined"
-          :class="[
-            'ml-2 rounded-full px-1.5 py-0.5 font-mono text-[10px]',
-            modelValue === f.key
-              ? 'bg-[var(--color-ieee-blue)]/10 text-[var(--color-ieee-blue)]'
-              : 'bg-[var(--color-surface-overlay)] text-[var(--color-text-muted)]',
-          ]"
+          :variant="modelValue === f.key ? 'blue' : 'default'"
+          size="sm"
+          class="ml-2 !rounded-full"
         >
           {{ counts[f.key] }}
-        </span>
+        </UiBaseBadge>
       </button>
     </div>
 
