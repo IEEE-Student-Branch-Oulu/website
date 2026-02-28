@@ -1,0 +1,113 @@
+/* ─── Design Tokens ──────────────────────────────────────────── */
+:root {
+  /* Brand */
+  --color-ieee-blue: #00629b;
+  --color-ieee-blue-light: #0077bb;
+  --color-ieee-blue-dark: #004f7c;
+  --color-ieee-accent: #00a3e0;
+
+  /* Surfaces - Light mode */
+  --color-surface: #ffffff;
+  --color-surface-raised: #f8f9fb;
+  --color-surface-overlay: #f0f2f5;
+  --color-border: #e2e6ea;
+  --color-border-subtle: #edf0f3;
+
+  /* Text - Light mode */
+  --color-text-primary: #0d1117;
+  --color-text-secondary: #4a5568;
+  --color-text-muted: #8a96a3;
+  --color-text-inverse: #ffffff;
+
+  /* Nav */
+  --nav-height: 64px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
+}
+
+.dark {
+  /* Surfaces - Dark mode */
+  --color-surface: #0d1117;
+  --color-surface-raised: #161b22;
+  --color-surface-overlay: #21262d;
+  --color-border: #30363d;
+  --color-border-subtle: #21262d;
+
+  /* Text - Dark mode */
+  --color-text-primary: #e6edf3;
+  --color-text-secondary: #8d96a0;
+  --color-text-muted: #6e7681;
+  --color-text-inverse: #0d1117;
+}
+
+/* ─── Base ───────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  transition:
+    background-color var(--transition-base),
+    color var(--transition-base);
+}
+
+/* ─── Focus ring ─────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-ieee-blue);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ─── Selection ──────────────────────────────────────────────── */
+::selection {
+  background-color: var(--color-ieee-blue);
+  color: #ffffff;
+}
+
+/* ─── Scrollbar (dark mode) ──────────────────────────────────── */
+.dark ::-webkit-scrollbar {
+  width: 8px;
+}
+.dark ::-webkit-scrollbar-track {
+  background: var(--color-surface-raised);
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+/* ─── Utility classes ────────────────────────────────────────── */
+.ieee-blue {
+  color: var(--color-ieee-blue);
+}
+.text-primary {
+  color: var(--color-text-primary);
+}
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+.text-muted {
+  color: var(--color-text-muted);
+}
+.surface {
+  background-color: var(--color-surface);
+}
+.surface-raised {
+  background-color: var(--color-surface-raised);
+}
+.border-token {
+  border-color: var(--color-border);
+}

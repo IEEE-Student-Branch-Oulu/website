@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🌐 Running frontend e2e tests..."
+
+npm --prefix frontend run test:e2e || exit 1
+
+echo "🚀 Push allowed!"

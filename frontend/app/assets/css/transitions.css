@@ -1,0 +1,30 @@
+/* ─── Page transitions ───────────────────────────────────────── */
+/* Triggered by nuxt.config.ts pageTransition: { name: 'page' } */
+
+.page-enter-active,
+.page-leave-active {
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease;
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+/* ─── Layout transitions ─────────────────────────────────────── */
+.layout-enter-active,
+.layout-leave-active {
+  transition: opacity 150ms ease;
+}
+
+.layout-enter-from,
+.layout-leave-to {
+  opacity: 0;
+}

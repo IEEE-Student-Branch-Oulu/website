@@ -1,0 +1,17 @@
+echo "🔍 Running frontend checks..."
+
+cd frontend || exit 1
+
+echo "📦 Installing deps check..."
+npm install --silent --no-audit --no-fund || exit 1
+
+echo "🎨 Lint & format staged files..."
+npx lint-staged || exit 1
+
+echo "🧠 Type check..."
+npm run typecheck || exit 1
+
+echo "🧪 Unit tests..."
+npm run test:run || exit 1
+
+echo "✅ Frontend pre-commit passed!"
