@@ -17,7 +17,7 @@ const currentYear = new Date().getFullYear()
 const navLinks = [
   { label: 'Home', to: '/' },
   { label: 'About', to: '/#' },
-  { label: 'Events', to: '/#' },
+  { label: 'Events', to: '/events' },
   { label: 'News', to: '/#' },
 ]
 

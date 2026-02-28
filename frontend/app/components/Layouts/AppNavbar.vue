@@ -21,7 +21,7 @@ interface NavLink {
 const navLinks: NavLink[] = [
   { label: 'Home', to: '/', exact: true },
   { label: 'About', to: '/#' },
-  { label: 'Events', to: '/#' },
+  { label: 'Events', to: '/events' },
   { label: 'News', to: '/#' },
 ]
 

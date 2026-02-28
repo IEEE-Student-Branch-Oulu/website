@@ -209,7 +209,7 @@ const countdownUnits = computed(() => [
               View all events
             </span>
             <NuxtLink
-              to="/#"
+              to="/events"
               class="font-mono text-[10px] text-white/60 transition-colors duration-150 hover:text-white focus-visible:underline focus-visible:outline-none"
             >
               /events →

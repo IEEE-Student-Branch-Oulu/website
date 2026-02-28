@@ -69,7 +69,9 @@ const stats = [
 
         <!-- CTAs -->
         <div class="hero-item mb-16 flex flex-wrap gap-3" style="animation-delay: 240ms">
-          <UiBaseButton to="/#" variant="primary" size="lg"> View Upcoming Events </UiBaseButton>
+          <UiBaseButton to="/events" variant="primary" size="lg">
+            View Upcoming Events
+          </UiBaseButton>
           <UiBaseButton
             href="https://discord.gg/your-server"
             variant="secondary"
