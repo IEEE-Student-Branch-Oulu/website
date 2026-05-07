@@ -278,7 +278,7 @@ const { el: headerEl, isVisible: headerVisible } = useReveal(0.1)
                   Follow on Telegram
                 </UiBaseLink>
                 <UiBaseLink
-                  to="/about"
+                  to="/#"
                   class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-[var(--color-text-secondary)] transition-all duration-150 hover:bg-[var(--color-surface-overlay)] hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ieee-blue)]"
                 >
                   <svg
