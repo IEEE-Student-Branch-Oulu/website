@@ -96,5 +96,14 @@ const CATEGORIES = Object.entries(CATEGORY_META) as [
         </button>
       </li>
     </ul>
+
+    <button
+      v-if="modelValue !== null"
+      type="button"
+      class="mt-3 text-xs text-[var(--color-text-muted)] underline underline-offset-2 transition-colors hover:text-[var(--color-text-primary)]"
+      @click="emit('update:modelValue', null)"
+    >
+      Clear filter
+    </button>
   </nav>
 </template>

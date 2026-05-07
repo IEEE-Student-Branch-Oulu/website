@@ -14,7 +14,7 @@
 definePageMeta({ layout: 'default' })
 
 useSeoMeta({
-  title: 'Home',
+  title: 'IEEE Oulu Student Branch',
   ogTitle: 'IEEE Oulu Student Branch',
   description:
     'The IEEE Student Branch at the University of Oulu. Workshops, tech talks, and an engineering community that ships.',
