@@ -9,12 +9,16 @@ Monorepo for the IEEE Student Branch Oulu website. The frontend is a Nuxt 4 / Vu
 ```
 website-main/
 ├── frontend/          # Nuxt 4 app (Vue 3, Tailwind CSS, TypeScript)
-├── backend/           # Python service (FastAPI — WIP)
+├── backend/           # FastAPI + PostgreSQL service — see backend/README.md
+├── docs/adr/          # Architecture Decision Records (the "why" behind choices)
 ├── .husky/            # Git hooks (pre-commit, commit-msg, pre-push)
 ├── .pre-commit-config.yaml
 ├── commitlint.config.mjs
 └── package.json       # Root — only husky + commitlint live here
 ```
+
+Stack-specific quick-starts: [`frontend/`](./frontend/) and [`backend/README.md`](./backend/README.md).
+Decision records: [`docs/adr/`](./docs/adr/).
 
 ---
 

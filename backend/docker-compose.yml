@@ -1,0 +1,37 @@
+# Local development stack for the backend.
+# `make dev` only starts `db`; the API runs on the host with --reload for fast
+# iteration. Use `docker compose up backend` to run the production-shaped
+# image alongside.
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ieee
+      POSTGRES_PASSWORD: ieee
+      POSTGRES_DB: ieee
+    ports:
+      - "5432:5432"
+    volumes:
+      - ieee_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ieee -d ieee"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  backend:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+asyncpg://ieee:ieee@db:5432/ieee
+      CORS_ORIGINS: http://localhost:3000
+      ENV: dev
+    ports:
+      - "8000:8000"
+    profiles: ["full"]
+
+volumes:
+  ieee_pgdata:

@@ -49,13 +49,13 @@ repos:
       - id: ruff-format # formats (replaces black)
         files: ^backend/
 
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.10.0
+  # mypy runs against the project venv via uv so it sees the real dep set
+  # (mirrors how ESLint/Prettier above use the frontend's node_modules).
+  - repo: local
     hooks:
       - id: mypy
-        files: ^backend/
-        args: ["--config-file=backend/mypy.ini"]
-        additional_dependencies:
-          - "fastapi"
-          - "sqlalchemy"
-          - "pydantic"
+        name: mypy (backend)
+        language: system
+        entry: bash -c 'cd backend && uv run mypy app scripts'
+        files: ^backend/(app|scripts)/.*\.py$
+        pass_filenames: false
