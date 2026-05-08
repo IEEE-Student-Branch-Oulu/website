@@ -65,9 +65,8 @@ const strengthColor = computed(
       />
       <button
         type="button"
-        class="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)]"
+        class="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1 text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-ieee-blue)]"
         :aria-label="visible ? 'Hide password' : 'Show password'"
-        tabindex="-1"
         @click="visible = !visible"
       >
         <svg
