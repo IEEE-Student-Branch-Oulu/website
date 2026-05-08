@@ -152,7 +152,7 @@ class TestListPaged:
         db_session.add(_make_user(email="other@example.com"))
         await db_session.flush()
 
-        rows, total = await list_paged(db_session, limit=10, offset=0, q="findme")
+        _, total = await list_paged(db_session, limit=10, offset=0, q="findme")
         assert total == 1
 
     async def test_excludes_soft_deleted(self, db_session: AsyncSession) -> None:
@@ -161,7 +161,7 @@ class TestListPaged:
         db_session.add(user)
         await db_session.flush()
 
-        rows, total = await list_paged(db_session, limit=10, offset=0)
+        _, total = await list_paged(db_session, limit=10, offset=0)
         assert total == 0
 
 
