@@ -1,0 +1,8 @@
+{% extends "_base.txt" %}
+{% block content %}
+Your role has been updated
+
+Hi {{ first_name }},
+
+Your account role has been changed to {{ new_role }}.
+{% endblock %}

@@ -26,3 +26,4 @@ logs
 # Playwright test results
 playwright-report
 test-results
+.claude

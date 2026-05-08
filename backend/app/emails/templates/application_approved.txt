@@ -1,0 +1,12 @@
+{% extends "_base.txt" %}
+{% block content %}
+Welcome to IEEE Student Branch Oulu!
+
+Hi {{ first_name }},
+
+Your membership application for the {{ period_year }}-{{ period_year + 1 }} period has been approved.
+
+You can now access the member dashboard, update your profile, and connect with other members.
+
+Dashboard: {{ base_url }}/members
+{% endblock %}

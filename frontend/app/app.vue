@@ -8,6 +8,9 @@
  * - NuxtRouteAnnouncer for screen reader accessibility
  */
 
+const { fetchMe } = useAuth()
+await callOnce(fetchMe)
+
 useHead({
   // Anti-flash: apply dark class BEFORE first paint to prevent white flash
   // This runs as an inline script in <head> — must be serializable
@@ -46,5 +49,7 @@ useHead({
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
+
+    <UiToast />
   </div>
 </template>

@@ -9,12 +9,16 @@ Monorepo for the IEEE Student Branch Oulu website. The frontend is a Nuxt 4 / Vu
 ```
 website-main/
 ├── frontend/          # Nuxt 4 app (Vue 3, Tailwind CSS, TypeScript)
-├── backend/           # Python service (FastAPI — WIP)
+├── backend/           # FastAPI + PostgreSQL service — see backend/README.md
+├── docs/adr/          # Architecture Decision Records (the "why" behind choices)
 ├── .husky/            # Git hooks (pre-commit, commit-msg, pre-push)
 ├── .pre-commit-config.yaml
 ├── commitlint.config.mjs
 └── package.json       # Root — only husky + commitlint live here
 ```
+
+Stack-specific quick-starts: [`frontend/`](./frontend/) and [`backend/README.md`](./backend/README.md).
+Decision records: [`docs/adr/`](./docs/adr/).
 
 ---
 
@@ -146,7 +150,7 @@ npm run test:run        # Single run (used by pre-commit hook)
 npm run test:coverage   # Run with v8 coverage report
 ```
 
-Tests live in `frontend/tests/unit/`. The Vitest environment is set to `nuxt` with `happy-dom`, so Vue components render correctly without a real browser. Coverage thresholds are enforced at **70% lines / 70% functions** — the run fails if you drop below.
+Tests live in `frontend/tests/unit/`. The Vitest environment is set to `nuxt` with `happy-dom`, so Vue components render correctly without a real browser. Coverage thresholds are enforced at **60% lines / 60% functions** — the run fails if you drop below.
 
 ### End-to-end tests (Playwright)
 

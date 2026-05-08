@@ -1,0 +1,12 @@
+{% extends "_base.txt" %}
+{% block content %}
+Membership application update
+
+Hi {{ first_name }},
+
+Unfortunately, your membership application for the {{ period_year }}-{{ period_year + 1 }} period was not approved.
+
+{% if reason %}Reason: {{ reason }}{% endif %}
+
+If you have questions, please contact us at our next event or reply to this email.
+{% endblock %}

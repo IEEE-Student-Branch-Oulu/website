@@ -18,12 +18,23 @@ interface NavLink {
   exact?: boolean
 }
 
-const navLinks: NavLink[] = [
-  { label: 'Home', to: '/', exact: true },
-  { label: 'About', to: '/#' },
-  { label: 'Events', to: '/events' },
-  { label: 'News', to: '/blog' },
-]
+const { isAuthenticated, isAdmin } = useAuth()
+
+const navLinks = computed<NavLink[]>(() => {
+  const links: NavLink[] = [
+    { label: 'Home', to: '/', exact: true },
+    { label: 'Membership', to: '/about/membership' },
+    { label: 'Events', to: '/events' },
+    { label: 'News', to: '/blog' },
+  ]
+  if (isAuthenticated.value) {
+    links.push({ label: 'Dashboard', to: '/members' })
+  }
+  if (isAdmin.value) {
+    links.push({ label: 'Admin', to: '/admin' })
+  }
+  return links
+})
 
 const socialLinks = [
   { name: 'Discord', href: 'https://discord.gg/your-server', icon: 'discord' as const },
@@ -104,15 +115,24 @@ function toggleMobile() {
         <!-- Dark mode toggle — always visible -->
         <UiDarkModeToggle />
 
-        <!-- Join Us CTA — hidden on small mobile -->
+        <!-- Auth CTA — hidden on small mobile -->
         <UiBaseButton
-          href="https://discord.gg/your-server"
+          v-if="!isAuthenticated"
+          href="/auth/register"
           variant="primary"
           size="sm"
-          external
           class="hidden sm:inline-flex"
         >
           Join Us
+        </UiBaseButton>
+        <UiBaseButton
+          v-else
+          href="/members"
+          variant="ghost"
+          size="sm"
+          class="hidden sm:inline-flex"
+        >
+          My Account
         </UiBaseButton>
 
         <!-- Hamburger — visible on mobile only -->
@@ -177,9 +197,10 @@ function toggleMobile() {
         <!-- Bottom row: social + CTA -->
         <div class="flex items-center justify-between px-4 py-3">
           <IconsSocialIcons :links="socialLinks" size="sm" />
-          <UiBaseButton href="https://discord.gg/your-server" variant="primary" size="sm" external>
+          <UiBaseButton v-if="!isAuthenticated" href="/auth/register" variant="primary" size="sm">
             Join Us
           </UiBaseButton>
+          <UiBaseButton v-else href="/members" variant="ghost" size="sm"> My Account </UiBaseButton>
         </div>
       </div>
     </Transition>
