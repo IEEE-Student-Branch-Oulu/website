@@ -4,22 +4,25 @@ test.describe('Auth pages', () => {
   test('register page renders the 3-step wizard', async ({ page }) => {
     await page.goto('/auth/register')
     await expect(page).toHaveTitle(/Register/)
-    await expect(page.getByRole('heading', { name: /create your account/i })).toBeVisible()
+    await expect(
+      page.getByRole('heading', { name: /join ieee student branch oulu/i })
+    ).toBeVisible()
     await expect(page.getByLabel(/email/i)).toBeVisible()
-    await expect(page.getByLabel(/^password$/i)).toBeVisible()
+    await expect(page.locator('input[type="password"]').first()).toBeVisible()
   })
 
   test('register step 1 validates required fields', async ({ page }) => {
     await page.goto('/auth/register')
-    await page.getByRole('button', { name: /next/i }).click()
-    await expect(page.getByText(/required/i).first()).toBeVisible()
+    await page.waitForLoadState('networkidle')
+    await page.getByRole('button', { name: /continue/i }).click()
+    await expect(page.getByText(/email is required/i).first()).toBeVisible()
   })
 
   test('login page renders email and password fields', async ({ page }) => {
     await page.goto('/auth/login')
     await expect(page).toHaveTitle(/Log in/)
     await expect(page.getByLabel(/email/i)).toBeVisible()
-    await expect(page.getByLabel(/password/i)).toBeVisible()
+    await expect(page.locator('input[type="password"]').first()).toBeVisible()
     await expect(page.getByRole('button', { name: /log in/i })).toBeVisible()
   })
 
@@ -31,19 +34,19 @@ test.describe('Auth pages', () => {
 
   test('forgot password page renders', async ({ page }) => {
     await page.goto('/auth/forgot-password')
-    await expect(page).toHaveTitle(/Forgot Password/)
+    await expect(page).toHaveTitle(/Forgot password/i)
     await expect(page.getByLabel(/email/i)).toBeVisible()
   })
 
   test('reset password page renders with token field', async ({ page }) => {
     await page.goto('/auth/reset-password?token=test-token')
-    await expect(page).toHaveTitle(/Reset Password/)
+    await expect(page).toHaveTitle(/Reset password/i)
     await expect(page.getByLabel(/new password/i)).toBeVisible()
   })
 
   test('verify email page handles missing token', async ({ page }) => {
     await page.goto('/auth/verify-email')
-    await expect(page.getByText(/invalid|missing|no token/i)).toBeVisible()
+    await expect(page.getByText(/invalid|missing|no verification token/i)).toBeVisible()
   })
 
   test('check your email page renders', async ({ page }) => {
@@ -97,6 +100,6 @@ test.describe('Membership info page', () => {
 
   test('membership page has a register CTA', async ({ page }) => {
     await page.goto('/about/membership')
-    await expect(page.getByRole('link', { name: /register|join|apply/i })).toBeVisible()
+    await expect(page.getByRole('link', { name: /apply for membership/i })).toBeVisible()
   })
 })

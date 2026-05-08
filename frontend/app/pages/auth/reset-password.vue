@@ -11,6 +11,14 @@ const success = ref(false)
 const error = ref('')
 
 async function submit() {
+  const rawToken = route.query.token
+  const token = Array.isArray(rawToken) ? rawToken[0] : rawToken
+
+  if (!token) {
+    error.value = 'Invalid or missing reset token.'
+    return
+  }
+
   if (password.value.length < 12) {
     error.value = 'Password must be at least 12 characters'
     return
@@ -20,7 +28,7 @@ async function submit() {
   try {
     await api('/auth/reset-password', {
       method: 'POST',
-      body: { token: route.query.token, password: password.value },
+      body: { token, password: password.value },
     })
     success.value = true
   } catch (e: unknown) {

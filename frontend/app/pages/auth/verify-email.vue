@@ -9,7 +9,8 @@ const status = ref<'loading' | 'success' | 'error'>('loading')
 const errorMessage = ref('')
 
 onMounted(async () => {
-  const token = route.query.token as string
+  const rawToken = route.query.token
+  const token = Array.isArray(rawToken) ? rawToken[0] : rawToken
   if (!token) {
     status.value = 'error'
     errorMessage.value = 'No verification token provided.'
