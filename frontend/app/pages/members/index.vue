@@ -45,6 +45,7 @@ async function deleteAccount() {
   try {
     await api('/members/me', { method: 'DELETE' })
     toast.success('Account deleted.')
+    await logout()
     await navigateTo('/')
   } catch {
     toast.error('Deletion failed.')
