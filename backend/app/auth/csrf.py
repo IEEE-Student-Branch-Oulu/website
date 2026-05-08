@@ -14,7 +14,7 @@ from starlette.requests import Request
 from starlette.responses import Response
 
 from app.auth.sessions import COOKIE_NAME as SESSION_COOKIE
-from app.core.errors import DomainError
+from app.core.errors import DomainError, _problem
 
 CSRF_COOKIE = "ieee_csrf"
 CSRF_HEADER = "X-CSRF-Token"
@@ -37,7 +37,11 @@ class CSRFMiddleware(BaseHTTPMiddleware):
                 or not header_val
                 or not secrets.compare_digest(csrf_cookie, header_val)
             ):
-                raise CSRFError("Missing or mismatched CSRF token.")
+                return _problem(
+                    status=403,
+                    title="CSRF Validation Failed",
+                    detail="Missing or mismatched CSRF token.",
+                )
 
         response = await call_next(request)
 
