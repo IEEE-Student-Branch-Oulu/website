@@ -11,7 +11,7 @@ install: ## Install deps + pre-commit hooks
 	cd .. && pre-commit install
 
 db-up: ## Start the Postgres container
-	docker-compose up -d db
+	docker compose up -d db
 	@echo "waiting for postgres..."
 	@until docker compose exec -T db pg_isready -U ieee >/dev/null 2>&1; do sleep 0.5; done
 	@echo "postgres ready."
