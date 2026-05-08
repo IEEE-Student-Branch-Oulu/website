@@ -46,7 +46,14 @@ async def gdpr_export(db: AsyncSession, user: User) -> dict[str, Any]:
 async def soft_delete(db: AsyncSession, user: User) -> None:
     user.deleted_at = datetime.now(tz=UTC)
     user.email = f"deleted-{user.id}@deleted.invalid"
+    user.password_hash = "!deleted"
     user.first_name = "Deleted"
     user.last_name = "User"
+    user.ieee_membership_number = "deleted"
+    user.ieee_grade = None
+    user.university = "Deleted"
+    user.study_level = None
+    user.study_program = None
+    user.expected_graduation_year = None
     user.bio = None
     user.consents = {}
