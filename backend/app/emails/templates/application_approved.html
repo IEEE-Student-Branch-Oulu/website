@@ -1,0 +1,8 @@
+{% extends "_base.html" %}
+{% block content %}
+<h2>Welcome to IEEE Student Branch Oulu!</h2>
+<p>Hi {{ first_name }},</p>
+<p>Your membership application for the {{ period_year }}-{{ period_year + 1 }} period has been approved.</p>
+<p>You can now access the member dashboard, update your profile, and connect with other members.</p>
+<p><a href="{{ base_url }}/members" style="display: inline-block; padding: 12px 24px; background: #006699; color: #fff; text-decoration: none; border-radius: 4px;">Go to Dashboard</a></p>
+{% endblock %}

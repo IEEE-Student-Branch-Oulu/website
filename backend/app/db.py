@@ -19,7 +19,7 @@ class Base(DeclarativeBase):
 
 def _build_engine() -> AsyncEngine:
     settings = get_settings()
-    return create_async_engine(settings.db.url, echo=settings.db.echo, future=True)
+    return create_async_engine(settings.database_url, echo=settings.database_echo, future=True)
 
 
 engine: AsyncEngine = _build_engine()

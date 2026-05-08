@@ -10,6 +10,12 @@ export default defineNuxtConfig({
 
   modules: ['@nuxtjs/tailwindcss', '@nuxt/eslint'],
 
+  runtimeConfig: {
+    public: {
+      apiBase: process.env.NUXT_PUBLIC_API_BASE ?? 'http://localhost:8000/api/v1',
+    },
+  },
+
   tailwindcss: {
     exposeConfig: true,
     viewer: true,

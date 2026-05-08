@@ -1,0 +1,10 @@
+{% extends "_base.html" %}
+{% block content %}
+<h2>Membership application update</h2>
+<p>Hi {{ first_name }},</p>
+<p>Unfortunately, your membership application for the {{ period_year }}-{{ period_year + 1 }} period was not approved.</p>
+{% if reason %}
+<p><strong>Reason:</strong> {{ reason }}</p>
+{% endif %}
+<p>If you have questions, please contact us at our next event or reply to this email.</p>
+{% endblock %}

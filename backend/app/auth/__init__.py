@@ -1,5 +1,7 @@
-"""Auth package — placeholder.
+"""Authentication package.
 
-Member registration and login are planned in a follow-up; see README.md
-in this directory for the deferred decisions and integration points.
+Tables (`Session`, `EmailToken`, `AuditLog`) live in `models`. The
+domain entity `User` lives in `app.domains.members`. Public functions,
+routers, and dependencies are added by later PRs in the auth-feature
+implementation.
 """

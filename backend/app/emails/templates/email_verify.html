@@ -1,0 +1,9 @@
+{% extends "_base.html" %}
+{% block content %}
+<h2>Verify your email address</h2>
+<p>Hi {{ first_name }},</p>
+<p>Click the link below to verify your email and continue your membership application:</p>
+<p><a href="{{ verify_url }}" style="display: inline-block; padding: 12px 24px; background: #006699; color: #fff; text-decoration: none; border-radius: 4px;">Verify Email</a></p>
+<p>This link expires in 24 hours.</p>
+<p>If you didn't register for IEEE Student Branch Oulu, you can safely ignore this email.</p>
+{% endblock %}

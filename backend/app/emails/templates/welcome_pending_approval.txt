@@ -1,0 +1,10 @@
+{% extends "_base.txt" %}
+{% block content %}
+Email verified - application submitted
+
+Hi {{ first_name }},
+
+Your email has been verified and your membership application has been submitted for board review.
+
+The board typically reviews applications at the next meeting. We'll notify you once a decision is made.
+{% endblock %}

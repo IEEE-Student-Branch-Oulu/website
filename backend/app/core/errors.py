@@ -33,6 +33,21 @@ class NotFoundError(DomainError):
     title = "Not Found"
 
 
+class AuthenticationError(DomainError):
+    status_code = _status.HTTP_401_UNAUTHORIZED
+    title = "Unauthorized"
+
+
+class PermissionDeniedError(DomainError):
+    status_code = _status.HTTP_403_FORBIDDEN
+    title = "Forbidden"
+
+
+class ConflictError(DomainError):
+    status_code = _status.HTTP_409_CONFLICT
+    title = "Conflict"
+
+
 def _problem(
     *, status: int, title: str, detail: str, type_: str = "about:blank", **extra: Any
 ) -> JSONResponse:
@@ -79,8 +94,11 @@ def _status_title(code: int) -> str:
 # Re-exported for unit tests
 __all__ = [
     "PROBLEM_MEDIA_TYPE",
+    "AuthenticationError",
+    "ConflictError",
     "DomainError",
     "NotFoundError",
+    "PermissionDeniedError",
     "register_exception_handlers",
 ]
 

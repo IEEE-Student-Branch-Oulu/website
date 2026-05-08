@@ -18,6 +18,11 @@ dependencies = [
     "markdown-it-py>=3.0",
     "python-dateutil>=2.9",
     "pre-commit>=4.6.0",
+    "argon2-cffi>=25.1.0",
+    "slowapi>=0.1.9",
+    "jinja2>=3.1.6",
+    "httpx>=0.28.1",
+    "resend>=2.0.0",
 ]
 
 [dependency-groups]
@@ -72,7 +77,7 @@ addopts = "-ra --strict-markers"
 [tool.coverage.run]
 source = ["app"]
 branch = true
-omit = ["app/auth/*"]
+omit = ["app/scripts/*"]
 
 [tool.coverage.report]
 fail_under = 70

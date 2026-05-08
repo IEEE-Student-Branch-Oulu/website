@@ -1,0 +1,8 @@
+IEEE Student Branch Oulu
+========================
+
+{% block content %}{% endblock %}
+
+---
+IEEE Student Branch, University of Oulu
+Privacy Policy: {{ base_url }}/legal/privacy

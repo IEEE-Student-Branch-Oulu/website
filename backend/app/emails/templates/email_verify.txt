@@ -1,0 +1,14 @@
+{% extends "_base.txt" %}
+{% block content %}
+Verify your email address
+
+Hi {{ first_name }},
+
+Visit this link to verify your email and continue your membership application:
+
+{{ verify_url }}
+
+This link expires in 24 hours.
+
+If you didn't register for IEEE Student Branch Oulu, you can safely ignore this email.
+{% endblock %}

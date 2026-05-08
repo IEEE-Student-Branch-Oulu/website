@@ -12,11 +12,13 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
-from app.config import get_settings
-from app.db import Base
 
 # Import models so they register with Base.metadata.
+from app.auth import models as _auth_models  # noqa: F401
+from app.config import get_settings
+from app.db import Base
 from app.domains.events import models as _events_models  # noqa: F401
+from app.domains.members import models as _members_models  # noqa: F401
 from app.domains.posts import models as _posts_models  # noqa: F401
 
 config = context.config
@@ -24,14 +26,14 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 settings = get_settings()
-config.set_main_option("sqlalchemy.url", settings.db.url)
+config.set_main_option("sqlalchemy.url", settings.database_url)
 
 target_metadata = Base.metadata
 
 
 def run_migrations_offline() -> None:
     context.configure(
-        url=settings.db.url,
+        url=settings.database_url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},

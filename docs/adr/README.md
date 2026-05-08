@@ -46,3 +46,8 @@ record honest about what we knew when.
 | 0004 | [RFC 7807 problem+json error format](./0004-rfc7807-problem-json-error-format.md) | Accepted |
 | 0005 | [Offset/limit pagination](./0005-offset-limit-pagination.md) | Accepted |
 | 0006 | [Monorepo frontend/backend layout](./0006-monorepo-frontend-backend-layout.md) | Accepted |
+| 0007 | [Session cookies over JWT](./0007-session-cookies-over-jwt.md) | Accepted |
+| 0008 | [Argon2id for password hashing](./0008-argon2id-passwords.md) | Accepted |
+| 0009 | [Resend email with pluggable backends](./0009-resend-email-with-pluggable-backends.md) | Accepted |
+| 0010 | [Single role RBAC](./0010-single-role-rbac.md) | Accepted |
+| 0011 | [GDPR soft delete and data export](./0011-gdpr-soft-delete-and-export.md) | Accepted |
