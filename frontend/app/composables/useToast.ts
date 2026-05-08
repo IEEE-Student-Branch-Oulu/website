@@ -8,13 +8,12 @@ export interface Toast {
   type: 'success' | 'error' | 'info'
 }
 
-let nextId = 0
-
 export function useToast() {
+  const nextId = useState<number>('toast-next-id', () => 0)
   const toasts = useState<Toast[]>('toasts', () => [])
 
   function show(message: string, type: Toast['type'] = 'info', duration = 4000) {
-    const id = nextId++
+    const id = nextId.value++
     toasts.value.push({ id, message, type })
     if (duration > 0) {
       setTimeout(() => dismiss(id), duration)
