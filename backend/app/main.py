@@ -11,7 +11,7 @@ from app import __version__
 from app.api.v1 import api_router
 from app.auth.csrf import CSRFMiddleware
 from app.config import Settings, get_settings
-from app.core.email import ConsoleBackend, ResendBackend, configure_backend
+from app.core.email import ConsoleBackend, MemoryBackend, ResendBackend, configure_backend
 from app.core.errors import register_exception_handlers
 from app.core.rate_limit import register_rate_limit_handler
 from app.db import engine
@@ -64,6 +64,9 @@ def _configure_email(settings: Settings) -> None:
         else:
             configure_backend(ResendBackend(settings.email_resend_api_key, settings.email_from))
             log.info("Email backend: resend (from=%s)", settings.email_from)
+    elif settings.email_backend == "memory":
+        configure_backend(MemoryBackend())
+        log.info("Email backend: memory (emails stored in memory)")
     else:
         configure_backend(ConsoleBackend())
         log.info("Email backend: console (emails print to stdout)")
