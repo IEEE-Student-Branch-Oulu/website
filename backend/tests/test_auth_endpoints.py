@@ -23,6 +23,9 @@ _CONSENTS = {"privacy": True, "terms": True}
 
 @pytest.fixture(autouse=True)
 def _use_memory_email() -> None:
+    from app.config import get_settings
+
+    get_settings().email_backend = "memory"
     configure_backend(MemoryBackend())
 
 

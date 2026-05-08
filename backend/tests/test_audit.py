@@ -64,7 +64,23 @@ class TestAuditRecord:
         assert entry.user_agent == "TestBrowser/1.0"
 
     async def test_entry_persists(self, db_session: AsyncSession) -> None:
-        await record(db_session, action=AuditAction.logout, actor_user_id=1)
+        from app.domains.members.models import User, UserStatus, Visibility
+
+        user = User(
+            email="audit@example.com",
+            password_hash="fake",
+            first_name="Audit",
+            last_name="User",
+            ieee_membership_number="12345678",
+            university="University of Oulu",
+            profile_visibility=Visibility.private,
+            consents={},
+            status=UserStatus.active,
+        )
+        db_session.add(user)
+        await db_session.flush()
+
+        await record(db_session, action=AuditAction.logout, actor_user_id=user.id)
         await db_session.flush()
         rows = (await db_session.execute(select(AuditLog))).scalars().all()
         assert len(rows) == 1
