@@ -150,7 +150,7 @@ npm run test:run        # Single run (used by pre-commit hook)
 npm run test:coverage   # Run with v8 coverage report
 ```
 
-Tests live in `frontend/tests/unit/`. The Vitest environment is set to `nuxt` with `happy-dom`, so Vue components render correctly without a real browser. Coverage thresholds are enforced at **70% lines / 70% functions** — the run fails if you drop below.
+Tests live in `frontend/tests/unit/`. The Vitest environment is set to `nuxt` with `happy-dom`, so Vue components render correctly without a real browser. Coverage thresholds are enforced at **60% lines / 60% functions** — the run fails if you drop below.
 
 ### End-to-end tests (Playwright)
 

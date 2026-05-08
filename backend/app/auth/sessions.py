@@ -84,6 +84,15 @@ async def load_session(db: AsyncSession, raw_token: str) -> Session | None:
         return None
 
     session.last_seen_at = now
+
+    from app.db import SessionLocal
+
+    async with SessionLocal() as update_db:
+        await update_db.execute(
+            update(Session).where(Session.id == session.id).values(last_seen_at=now)
+        )
+        await update_db.commit()
+
     return session
 
 

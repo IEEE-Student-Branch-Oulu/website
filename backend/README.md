@@ -19,7 +19,7 @@ Server runs at **http://localhost:8000** with interactive docs at **/docs**.
 ## Daily commands
 
 ```bash
-make test           # pytest + coverage (≥70%)
+make test           # pytest + coverage (≥60%)
 make lint           # ruff check + mypy
 make fmt            # ruff format
 make migrate m="add X to events"   # autogenerate alembic migration
@@ -35,7 +35,7 @@ uv run python -m app.scripts.manage_user promote user@example.com
 uv run python -m app.scripts.manage_user activate user@example.com
 
 # Seed demo data
-uv run python -m app.scripts.seed
+uv run python -m scripts.seed
 ```
 
 ## Layout
