@@ -40,6 +40,8 @@ class Event(Base):
 
     tags: Mapped[list[str]] = mapped_column(JSONB, default=list, nullable=False)
 
+    cover_image_url: Mapped[str | None] = mapped_column(String(500))
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )

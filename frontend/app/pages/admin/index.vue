@@ -25,6 +25,24 @@ useHead({ title: 'Admin - IEEE SB Oulu' })
         <h3 class="mb-1 font-semibold text-[var(--color-text-primary)]">Audit Log</h3>
         <p class="text-sm text-[var(--color-text-secondary)]">View security-relevant actions</p>
       </NuxtLink>
+
+      <NuxtLink
+        to="/admin/news"
+        class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 transition-shadow hover:shadow-md"
+      >
+        <h3 class="mb-1 font-semibold text-[var(--color-text-primary)]">News & Infodumps</h3>
+        <p class="text-sm text-[var(--color-text-secondary)]">
+          Write and manage blog posts and event recaps
+        </p>
+      </NuxtLink>
+
+      <NuxtLink
+        to="/admin/events"
+        class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 transition-shadow hover:shadow-md"
+      >
+        <h3 class="mb-1 font-semibold text-[var(--color-text-primary)]">Events</h3>
+        <p class="text-sm text-[var(--color-text-secondary)]">Create and manage events</p>
+      </NuxtLink>
     </div>
   </div>
 </template>

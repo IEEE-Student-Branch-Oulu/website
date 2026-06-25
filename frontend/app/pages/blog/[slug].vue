@@ -20,22 +20,24 @@
  *   - UiBaseLink for the "Back to all infodumps" navigation and Twitter share link
  *   - UiBaseButton for the copy link action button
  *
- * TODO: Replace DUMMY_FULL_POST with useFetch(`/api/v1/posts/${slug}`)
  */
-import { DUMMY_FULL_POST, DUMMY_POSTS, useToc } from '~/composables/useBlog'
+import { useBlogApi, useToc } from '~/composables/useBlog'
 
 definePageMeta({ layout: 'default' })
 
-const _route = useRoute()
+const route = useRoute()
+const slug = route.params.slug as string
 
-// TODO: fetch real post by slug
-// const { data: post } = await useFetch(`/api/v1/posts/${_route.params.slug}`)
-const post = DUMMY_FULL_POST
+const { get, list } = useBlogApi()
 
-// 404 guard (for when real API is wired)
-if (!post) {
+const { data: postRes, error } = await useAsyncData(`post-${slug}`, () => get(slug))
+
+// 404 guard
+if (error.value || !postRes.value) {
   throw createError({ statusCode: 404, statusMessage: 'Post not found' })
 }
+
+const post = postRes.value
 
 useSeoMeta({
   title: post.title,
@@ -48,8 +50,11 @@ useSeoMeta({
 const { activeId } = useToc(post.headings)
 
 // ── Related posts (same category, excluding current) ─────────
+const { data: allPosts } = await useAsyncData('blog-posts-related', () => list())
 const relatedPosts = computed(() =>
-  DUMMY_POSTS.filter((p) => p.category === post.category && p.slug !== post.slug).slice(0, 3)
+  (allPosts.value?.items ?? [])
+    .filter((p) => p.category === post.category && p.slug !== post.slug)
+    .slice(0, 3)
 )
 
 function copyLink() {
@@ -70,6 +75,36 @@ function copyLink() {
         <article class="min-w-0 max-w-3xl flex-1">
           <!-- Post header -->
           <BlogPostHeader :post="post" />
+
+          <!-- Cover image -->
+          <img
+            v-if="post.coverImageUrl"
+            :src="post.coverImageUrl"
+            :alt="post.title"
+            class="mb-8 w-full rounded-xl border border-[var(--color-border)] object-cover"
+          />
+
+          <!-- Recap → event link -->
+          <UiBaseLink
+            v-if="post.eventSlug"
+            :to="`/events/${post.eventSlug}`"
+            class="mb-8 inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ieee-blue)] transition-colors duration-150 hover:text-[var(--color-ieee-blue-light)] focus-visible:underline focus-visible:outline-none"
+          >
+            <svg
+              class="size-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <rect x="3" y="4" width="18" height="18" rx="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            View the event this recaps
+          </UiBaseLink>
 
           <!-- Post body -->
           <BlogPostBody :html="post.bodyHtml" :category="post.category" />

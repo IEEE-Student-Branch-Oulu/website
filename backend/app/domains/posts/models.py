@@ -35,6 +35,10 @@ class Post(Base):
     tags: Mapped[list[str]] = mapped_column(JSONB, default=list, nullable=False)
     featured: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
+    cover_image_url: Mapped[str | None] = mapped_column(String(500))
+    # Optional link to a past event this post recaps (events.slug).
+    event_slug: Mapped[str | None] = mapped_column(String(200))
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )

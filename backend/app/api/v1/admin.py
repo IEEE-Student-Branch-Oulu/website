@@ -5,9 +5,10 @@ from __future__ import annotations
 import csv
 import io
 from datetime import UTC, datetime
-from typing import Any
+from typing import Annotated, Any
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, File, Request, UploadFile
+from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, ConfigDict
 from pydantic.alias_generators import to_camel
@@ -18,6 +19,7 @@ from app.auth.dependencies import RequireAdmin
 from app.auth.models import AuditAction, AuditLog
 from app.auth.sessions import revoke_all_sessions
 from app.config import get_settings
+from app.core import storage
 from app.core.audit import record
 from app.core.email import EmailMessage, get_backend, render
 from app.core.errors import ConflictError, NotFoundError
@@ -55,6 +57,10 @@ class RoleChangeRequest(_CamelModel):
 
 class RejectRequest(_CamelModel):
     reason: str | None = None
+
+
+class UploadResponse(_CamelModel):
+    url: str
 
 
 class AuditEntry(_CamelModel):
@@ -427,6 +433,19 @@ async def export_users(
         media_type="text/csv",
         headers={"Content-Disposition": f'attachment; filename="{filename}"'},
     )
+
+
+@router.post("/uploads", summary="Upload an image")
+async def upload_image(
+    _admin: RequireAdmin,
+    file: Annotated[UploadFile, File()],
+) -> UploadResponse:
+    data = await file.read()
+    # boto3 is blocking — keep it off the event loop.
+    url = await run_in_threadpool(
+        storage.upload, data, file.content_type or "application/octet-stream"
+    )
+    return UploadResponse(url=url)
 
 
 @router.get("/audit")

@@ -34,6 +34,14 @@ class Settings(BaseSettings):
     # Public-facing URL (used in email links)
     public_base_url: str = "http://localhost:3000"
 
+    # S3 object storage (image uploads)
+    s3_bucket: str = ""
+    s3_region: str = "eu-north-1"
+    s3_endpoint_url: str = ""  # optional — set for S3-compatible providers
+    s3_public_base_url: str = ""  # optional — CDN/base URL; falls back to bucket URL
+    aws_access_key_id: str = ""
+    aws_secret_access_key: str = ""
+
     @property
     def cors_origin_list(self) -> list[str]:
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]

@@ -20,7 +20,7 @@
  *   - UiBaseCard + UiBaseButton for the empty state
  *   - UiBaseLink for the Discord link in the about sidebar
  */
-import { DUMMY_POSTS, type PostCategory } from '~/composables/useBlog'
+import { useBlogApi, type PostCategory } from '~/composables/useBlog'
 
 definePageMeta({ layout: 'default' })
 
@@ -30,26 +30,33 @@ useSeoMeta({
     'Workshop recaps, tutorials, tech notes, and branch news from the IEEE Oulu Student Branch.',
 })
 
+// ── Data ──────────────────────────────────────────────────────
+const { list } = useBlogApi()
+const { data } = await useAsyncData('blog-posts', () => list())
+const allPosts = computed(() => data.value?.items ?? [])
+
 // ── Filter state ──────────────────────────────────────────────
 const activeCategory = ref<PostCategory | null>(null)
 
 // ── Derived data ──────────────────────────────────────────────
-const featuredPost = computed(() => DUMMY_POSTS.find((p) => p.featured) ?? DUMMY_POSTS[0]!)
+const featuredPost = computed(() => allPosts.value.find((p) => p.featured) ?? allPosts.value[0])
 
 const filteredPosts = computed(() => {
-  const posts = DUMMY_POSTS.filter((p) => !p.featured || activeCategory.value !== null)
-  if (!activeCategory.value) return DUMMY_POSTS
-  return posts.filter((p) => p.category === activeCategory.value)
+  if (!activeCategory.value) return allPosts.value
+  return allPosts.value.filter((p) => p.category === activeCategory.value)
 })
 
-// Non-featured posts for the grid
+// Non-featured posts for the grid (the featured post gets its own hero slot
+// only while no category filter is active).
 const gridPosts = computed(() =>
-  filteredPosts.value.filter((p) => p.id !== featuredPost.value.id || activeCategory.value !== null)
+  filteredPosts.value.filter(
+    (p) => activeCategory.value !== null || p.id !== featuredPost.value?.id
+  )
 )
 
 const categoryCounts = computed(() => {
   const counts: Partial<Record<PostCategory, number>> = {}
-  DUMMY_POSTS.forEach((p) => {
+  allPosts.value.forEach((p) => {
     counts[p.category] = (counts[p.category] ?? 0) + 1
   })
   return counts
@@ -81,7 +88,7 @@ const { el: headerEl, isVisible: headerVisible } = useReveal(0.05)
               :level="1"
             />
             <p class="flex-shrink-0 font-mono text-sm text-[var(--color-text-muted)]">
-              {{ DUMMY_POSTS.length }} posts
+              {{ allPosts.length }} posts
             </p>
           </div>
         </div>
@@ -90,7 +97,7 @@ const { el: headerEl, isVisible: headerVisible } = useReveal(0.05)
 
     <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       <!-- ── Featured post ─────────────────────────────────── -->
-      <div v-if="!activeCategory" class="mb-12">
+      <div v-if="!activeCategory && featuredPost" class="mb-12">
         <BlogFeaturedPost :post="featuredPost" />
       </div>
 
@@ -146,7 +153,7 @@ const { el: headerEl, isVisible: headerVisible } = useReveal(0.05)
               <BlogCategoryFilter
                 v-model="activeCategory"
                 :counts="categoryCounts"
-                :total="DUMMY_POSTS.length"
+                :total="allPosts.length"
               />
             </UiBaseCard>
 

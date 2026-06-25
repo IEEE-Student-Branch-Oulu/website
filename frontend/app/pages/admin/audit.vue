@@ -41,6 +41,16 @@ function formatDate(iso: string): string {
   return new Date(iso).toLocaleString()
 }
 
+function summarize(meta: Record<string, unknown>): string {
+  if (!meta || Object.keys(meta).length === 0) return '-'
+  const kind = meta.kind ? `${meta.kind}` : ''
+  const label = meta.title ?? meta.slug ?? meta.id
+  if (label !== undefined) return [kind, label].filter(Boolean).join(' · ')
+  return Object.entries(meta)
+    .map(([k, v]) => `${k}: ${v}`)
+    .join(', ')
+}
+
 onMounted(() => load())
 </script>
 
@@ -65,6 +75,7 @@ onMounted(() => load())
             <th class="pb-2 pr-4 font-medium">Action</th>
             <th class="pb-2 pr-4 font-medium">Actor</th>
             <th class="pb-2 pr-4 font-medium">Target</th>
+            <th class="pb-2 pr-4 font-medium">Details</th>
             <th class="pb-2 font-medium">IP</th>
           </tr>
         </thead>
@@ -85,6 +96,9 @@ onMounted(() => load())
             </td>
             <td class="py-3 pr-4 text-[var(--color-text-secondary)]">
               {{ entry.targetUserId ?? '-' }}
+            </td>
+            <td class="py-3 pr-4 text-[var(--color-text-secondary)]">
+              {{ summarize(entry.metadata) }}
             </td>
             <td class="py-3 text-[var(--color-text-tertiary)]">{{ entry.ip ?? '-' }}</td>
           </tr>

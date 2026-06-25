@@ -48,6 +48,9 @@ class AuditAction(StrEnum):
     membership_renew = "membership_renew"
     gdpr_export = "gdpr_export"
     gdpr_delete = "gdpr_delete"
+    content_create = "content_create"
+    content_update = "content_update"
+    content_delete = "content_delete"
 
 
 class Session(Base):

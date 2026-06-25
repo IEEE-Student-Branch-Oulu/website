@@ -41,15 +41,6 @@ const typeMeta = computed(() => EVENT_TYPE_META[props.event.type])
 
 const delayMs = computed(() => Math.min(props.index * 80, 400))
 
-// Spots urgency level
-const spotsUrgency = computed(() => {
-  const left = props.event.spotsLeft
-  if (!left) return null
-  if (left <= 3) return 'critical'
-  if (left <= 8) return 'low'
-  return 'ok'
-})
-
 const isPast = computed(() => props.event.status === 'past')
 </script>
 
@@ -217,43 +208,12 @@ const isPast = computed(() => props.event.status === 'past')
           </UiBaseBadge>
         </div>
 
-        <!-- Footer: spots left + CTA -->
+        <!-- Footer: status + CTA -->
         <div
           class="mt-auto flex items-center justify-between gap-4 border-t border-[var(--color-border-subtle)] pt-4"
         >
-          <!-- Spots left indicator -->
-          <div v-if="!isPast && event.spotsLeft !== undefined" class="flex items-center gap-1.5">
-            <svg
-              class="size-3.5"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              aria-hidden="true"
-            >
-              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-              <circle cx="9" cy="7" r="4" />
-              <path d="M23 21v-2a4 4 0 00-3-3.87" />
-              <path d="M16 3.13a4 4 0 010 7.75" />
-            </svg>
-            <span
-              :class="[
-                'font-mono text-xs font-medium',
-                spotsUrgency === 'critical' ? 'text-red-500' : '',
-                spotsUrgency === 'low' ? 'text-orange-500' : '',
-                spotsUrgency === 'ok' ? 'text-[var(--color-text-muted)]' : '',
-              ]"
-            >
-              <span v-if="spotsUrgency === 'critical'">Only {{ event.spotsLeft }} spots left!</span>
-              <span v-else-if="spotsUrgency === 'low'">{{ event.spotsLeft }} spots left</span>
-              <span v-else>{{ event.spotsLeft }} / {{ event.capacity }} spots</span>
-            </span>
-          </div>
-
-          <!-- Past: read recap label -->
-          <div v-else-if="isPast" class="font-mono text-xs text-[var(--color-text-muted)]">
-            Archived
-          </div>
+          <!-- Past: archived label -->
+          <div v-if="isPast" class="font-mono text-xs text-[var(--color-text-muted)]">Archived</div>
 
           <div v-else class="flex-1" />
 
