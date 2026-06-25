@@ -195,7 +195,7 @@ const countdownUnits = computed(() => [
           <div v-else class="text-center">
             <p class="font-mono text-lg text-white/70">This event has passed.</p>
             <NuxtLink
-              to="/#"
+              to="/events"
               class="mt-2 block text-sm text-white underline underline-offset-4 hover:text-white/80"
             >
               View all events →

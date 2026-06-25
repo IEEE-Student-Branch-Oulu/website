@@ -16,7 +16,7 @@ const currentYear = new Date().getFullYear()
 
 const navLinks = [
   { label: 'Home', to: '/' },
-  { label: 'About', to: '/#' },
+  { label: 'Membership', to: '/about/membership' },
   { label: 'Events', to: '/events' },
   { label: 'News', to: '/blog' },
 ]
@@ -31,11 +31,17 @@ const universityLinks = [
   { label: 'IEEE Finland Section', href: 'https://www.ieee.fi' },
 ]
 
+// Only channels we actually run go here. Discord / Telegram / GitHub / email
+// can be added back once they exist — see the commented entries below.
 const socialLinks = [
-  { name: 'Discord', href: 'https://discord.gg/your-server', icon: 'discord' as const },
-  { name: 'Telegram', href: 'https://t.me/your-channel', icon: 'telegram' as const },
-  { name: 'LinkedIn', href: 'https://linkedin.com/company/your-page', icon: 'linkedin' as const },
-  { name: 'GitHub', href: 'https://github.com/ieee-oulu', icon: 'github' as const },
+  {
+    name: 'LinkedIn',
+    href: 'https://www.linkedin.com/company/ieeesb-oulu',
+    icon: 'linkedin' as const,
+  },
+  // { name: 'Discord', href: '', icon: 'discord' as const },
+  // { name: 'Telegram', href: '', icon: 'telegram' as const },
+  // { name: 'GitHub', href: '', icon: 'github' as const },
 ]
 </script>
 
@@ -123,12 +129,25 @@ const socialLinks = [
               Pentti Kaiteran katu 1<br />
               90570 Oulu, Finland
             </p>
+            <!--
+              No official branch email yet. Uncomment once it's set up.
             <a
               href="mailto:ieee@oulu.fi"
               class="text-sm text-[var(--color-text-secondary)] transition-colors duration-150 hover:text-[var(--color-ieee-blue)] focus-visible:underline focus-visible:outline-none"
             >
               ieee@oulu.fi
             </a>
+            -->
+            <p class="text-sm text-[var(--color-text-secondary)]">
+              Reach us on
+              <a
+                href="https://www.linkedin.com/company/ieeesb-oulu"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-[var(--color-ieee-blue)] transition-colors duration-150 hover:underline focus-visible:underline focus-visible:outline-none"
+                >LinkedIn</a
+              >.
+            </p>
           </address>
         </div>
       </div>
