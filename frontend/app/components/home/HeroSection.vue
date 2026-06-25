@@ -14,11 +14,12 @@
  * When the API is ready, the "next event" badge can be wired to real data.
  */
 
+// Honest highlights for a freshly founded branch — no fabricated counters.
 const stats = [
-  { value: '130+', label: 'Members' },
-  { value: '47', label: 'Events Hosted' },
-  { value: '3', label: 'Active Years' },
-  { value: '2', label: 'Regional Awards' },
+  { value: '1975', label: 'Founded' },
+  { value: 'Oulu', label: 'Home campus' },
+  { value: '400k+', label: 'IEEE worldwide' },
+  { value: 'Open', label: 'Membership' },
 ]
 </script>
 
@@ -63,8 +64,8 @@ const stats = [
           class="hero-item mb-10 max-w-xl text-lg leading-relaxed text-[var(--color-text-secondary)] sm:text-xl"
           style="animation-delay: 160ms"
         >
-          The official IEEE Student Branch for the scientifically minded. Join us for hands-on
-          workshops, deep-dive tech talks, and a community of engineers who actually ship things.
+          We're the IEEE Student Branch at the University of Oulu — a new community for students who
+          like building things. Come for the workshops and tech talks, stay for the people.
         </p>
 
         <!-- CTAs -->
@@ -72,12 +73,7 @@ const stats = [
           <UiBaseButton to="/events" variant="primary" size="lg">
             View Upcoming Events
           </UiBaseButton>
-          <UiBaseButton
-            href="https://discord.gg/your-server"
-            variant="secondary"
-            size="lg"
-            external
-          >
+          <UiBaseButton to="/about/membership" variant="secondary" size="lg">
             Join us
             <!-- Arrow icon -->
             <svg

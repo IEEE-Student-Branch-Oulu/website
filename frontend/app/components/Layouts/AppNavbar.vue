@@ -36,13 +36,6 @@ const navLinks = computed<NavLink[]>(() => {
   return links
 })
 
-const socialLinks = [
-  { name: 'Discord', href: 'https://discord.gg/your-server', icon: 'discord' as const },
-  { name: 'Telegram', href: 'https://t.me/your-channel', icon: 'telegram' as const },
-  { name: 'LinkedIn', href: 'https://linkedin.com/company/your-page', icon: 'linkedin' as const },
-  { name: 'GitHub', href: 'https://github.com/ieee-oulu', icon: 'github' as const },
-]
-
 // ── State ──────────────────────────────────────────────────────
 const mobileOpen = ref(false)
 const isScrolled = ref(false)
@@ -115,23 +108,21 @@ function toggleMobile() {
         <!-- Dark mode toggle — always visible -->
         <UiDarkModeToggle />
 
-        <!-- Auth CTA — hidden on small mobile -->
-        <UiBaseButton
-          v-if="!isAuthenticated"
-          href="/auth/register"
-          variant="primary"
-          size="sm"
-          class="hidden sm:inline-flex"
-        >
-          Join Us
-        </UiBaseButton>
-        <UiBaseButton
-          v-else
-          href="/members"
-          variant="ghost"
-          size="sm"
-          class="hidden sm:inline-flex"
-        >
+        <!-- Auth CTAs — hidden on small mobile -->
+        <template v-if="!isAuthenticated">
+          <UiBaseButton to="/auth/login" variant="ghost" size="sm" class="hidden sm:inline-flex">
+            Log in
+          </UiBaseButton>
+          <UiBaseButton
+            to="/about/membership"
+            variant="primary"
+            size="sm"
+            class="hidden sm:inline-flex"
+          >
+            Join Us
+          </UiBaseButton>
+        </template>
+        <UiBaseButton v-else to="/members" variant="ghost" size="sm" class="hidden sm:inline-flex">
           My Account
         </UiBaseButton>
 
@@ -194,13 +185,19 @@ function toggleMobile() {
         <!-- Divider -->
         <div class="mx-4 border-t border-[var(--color-border)]" />
 
-        <!-- Bottom row: social + CTA -->
-        <div class="flex items-center justify-between px-4 py-3">
-          <IconsSocialIcons :links="socialLinks" size="sm" />
-          <UiBaseButton v-if="!isAuthenticated" href="/auth/register" variant="primary" size="sm">
-            Join Us
+        <!-- Bottom row: auth CTAs -->
+        <div class="flex items-center gap-3 px-4 py-3">
+          <template v-if="!isAuthenticated">
+            <UiBaseButton to="/auth/login" variant="ghost" size="sm" class="flex-1">
+              Log in
+            </UiBaseButton>
+            <UiBaseButton to="/about/membership" variant="primary" size="sm" class="flex-1">
+              Join Us
+            </UiBaseButton>
+          </template>
+          <UiBaseButton v-else to="/members" variant="ghost" size="sm" class="flex-1">
+            My Account
           </UiBaseButton>
-          <UiBaseButton v-else href="/members" variant="ghost" size="sm"> My Account </UiBaseButton>
         </div>
       </div>
     </Transition>

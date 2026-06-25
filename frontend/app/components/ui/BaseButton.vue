@@ -9,14 +9,15 @@
  *   size     - 'sm' | 'md' | 'lg'
  *   loading  - shows spinner, disables interaction
  *   disabled - standard disabled state
- *   href     - renders as <a> tag if provided
+ *   to       - renders as <NuxtLink> for internal SPA navigation
+ *   href     - renders as <a> tag if provided (external / non-route links)
  *   external - adds target="_blank" rel="noopener noreferrer"
  *
  * Usage:
  *   <BaseButton variant="primary" size="md" @click="handleClick">
  *     Join Us
  *   </BaseButton>
- *   <BaseButton href="/events" variant="secondary">View Events</BaseButton>
+ *   <BaseButton to="/events" variant="secondary">View Events</BaseButton>
  */
 
 interface Props {
@@ -24,6 +25,7 @@ interface Props {
   size?: 'sm' | 'md' | 'lg'
   loading?: boolean
   disabled?: boolean
+  to?: string
   href?: string
   external?: boolean
   type?: 'button' | 'submit' | 'reset'
@@ -41,9 +43,14 @@ const emit = defineEmits<{
   click: [event: MouseEvent]
 }>()
 
-const tag = computed(() => (props.href ? 'a' : 'button'))
+const tag = computed(() => {
+  if (props.to) return resolveComponent('NuxtLink')
+  if (props.href) return 'a'
+  return 'button'
+})
 
 const linkProps = computed(() => {
+  if (props.to) return { to: props.to }
   if (!props.href) return {}
   return props.external
     ? { href: props.href, target: '_blank', rel: 'noopener noreferrer' }

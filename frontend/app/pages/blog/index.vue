@@ -169,14 +169,14 @@ const { el: headerEl, isVisible: headerVisible } = useReveal(0.05)
                 recaps to deep technical tutorials.
               </p>
               <p class="mt-2 text-sm leading-relaxed text-[var(--color-text-secondary)]">
-                Want to contribute? Reach out on Discord.
+                Got something to share? Members can pitch a post — say hi on LinkedIn.
               </p>
               <UiBaseLink
-                href="https://discord.gg/your-server"
+                href="https://www.linkedin.com/company/ieeesb-oulu"
                 external
                 class="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-[var(--color-ieee-blue)] transition-colors duration-150 hover:text-[var(--color-ieee-blue-light)] focus-visible:underline focus-visible:outline-none"
               >
-                Join the Discord
+                Connect on LinkedIn
                 <svg
                   class="size-3.5"
                   viewBox="0 0 24 24"
