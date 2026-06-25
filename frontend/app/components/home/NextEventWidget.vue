@@ -10,25 +10,21 @@
  *   - Left: event metadata. Right: monospace countdown + RSVP CTA
  *   - Responsive: stacks on mobile, side-by-side on desktop
  *
- * For V1, event data is hardcoded dummy data.
- * TODO: Replace with `useFetch('/api/v1/events/next')` when API is ready.
+ * Fetches the next upcoming event from the API. Renders nothing when
+ * there is no upcoming event.
  */
 
-// ── Dummy data — replace with API call ───────────────────────
-const event = {
-  title: 'AI & Machine Learning Workshop',
-  description:
-    "A hands-on introduction to ML fundamentals. We'll train a simple classifier from scratch using Python and scikit-learn — no prior ML experience required. Bring your laptop.",
-  dateISO: '2026-03-15T13:00:00',
-  dateDisplay: 'Saturday, March 15, 2026',
-  timeDisplay: '13:00 – 17:00 EET',
-  location: 'Linnanmaa Campus, Room TS101',
-  type: 'Workshop',
-  typeVariant: 'orange' as const,
-  rsvpLink: 'https://forms.gle/your-rsvp-form',
-}
+import { EVENT_TYPE_META, useEventsApi } from '~/composables/useEvents'
 
-const { formatted, time } = useCountdown(event.dateISO)
+const { getNext } = useEventsApi()
+const { data: event } = await useAsyncData('home-next-event', () => getNext(), {
+  // No upcoming event → 404; treat as "nothing to show".
+  default: () => null,
+})
+
+const typeMeta = computed(() => (event.value ? EVENT_TYPE_META[event.value.type] : null))
+
+const { formatted, time } = useCountdown(event.value?.dateISO ?? new Date().toISOString())
 
 const countdownUnits = computed(() => [
   { value: formatted.value.days, label: 'Days' },
@@ -40,6 +36,7 @@ const countdownUnits = computed(() => [
 
 <template>
   <section
+    v-if="event"
     class="relative overflow-hidden bg-[var(--color-ieee-blue)]"
     aria-labelledby="next-event-heading"
   >
@@ -74,8 +71,10 @@ const countdownUnits = computed(() => [
           </div>
 
           <!-- Event type + title -->
-          <div class="mb-2">
-            <UiBaseBadge variant="orange" size="sm">{{ event.type }}</UiBaseBadge>
+          <div v-if="typeMeta" class="mb-2">
+            <UiBaseBadge :variant="typeMeta.badgeVariant" size="sm">{{
+              typeMeta.label
+            }}</UiBaseBadge>
           </div>
           <h2
             id="next-event-heading"
@@ -139,6 +138,7 @@ const countdownUnits = computed(() => [
 
           <!-- RSVP button -->
           <a
+            v-if="event.rsvpLink"
             :href="event.rsvpLink"
             target="_blank"
             rel="noopener noreferrer"

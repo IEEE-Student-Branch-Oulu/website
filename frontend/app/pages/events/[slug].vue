@@ -21,23 +21,24 @@
  *   - UiBaseButton for RSVP CTA and back navigation
  *   - UiBaseLink for location link
  *
- * TODO: Replace DUMMY_EVENTS lookup with useFetch(`/api/v1/events/${slug}`)
  */
-import { DUMMY_EVENTS, EVENT_TYPE_META } from '~/composables/useEvents'
+import { EVENT_TYPE_META, useEventsApi } from '~/composables/useEvents'
+import { useBlogApi } from '~/composables/useBlog'
 
 definePageMeta({ layout: 'default' })
 
 const route = useRoute()
 const slug = route.params.slug as string
 
-// TODO: fetch real event by slug
-// const { data: event } = await useFetch(`/api/v1/events/${slug}`)
-const event = DUMMY_EVENTS.find((e) => e.slug === slug)
+const { get, list } = useEventsApi()
+const { data: eventRef, error } = await useAsyncData(`event-${slug}`, () => get(slug))
 
 // 404 guard
-if (!event) {
+if (error.value || !eventRef.value) {
   throw createError({ statusCode: 404, statusMessage: 'Event not found' })
 }
+
+const event = eventRef.value
 
 const typeMeta = computed(() => EVENT_TYPE_META[event.type])
 const isPast = computed(() => event.status === 'past')
@@ -49,19 +50,18 @@ useSeoMeta({
   ogDescription: event.description,
 })
 
-// Spots urgency level
-const spotsUrgency = computed(() => {
-  const left = event.spotsLeft
-  if (!left) return null
-  if (left <= 3) return 'critical'
-  if (left <= 8) return 'low'
-  return 'ok'
-})
-
 // Related events: same type, excluding current, max 3
+const { data: allEvents } = await useAsyncData('events-related', () => list())
 const relatedEvents = computed(() =>
-  DUMMY_EVENTS.filter((e) => e.type === event.type && e.slug !== event.slug).slice(0, 3)
+  (allEvents.value?.items ?? [])
+    .filter((e) => e.type === event.type && e.slug !== event.slug)
+    .slice(0, 3)
 )
+
+// Recap post linked to this event (if any).
+const { list: listPosts } = useBlogApi()
+const { data: recapData } = await useAsyncData(`event-recap-${slug}`, () => listPosts())
+const recapPost = computed(() => (recapData.value?.items ?? []).find((p) => p.eventSlug === slug))
 </script>
 
 <template>
@@ -128,12 +128,41 @@ const relatedEvents = computed(() =>
             aria-hidden="true"
           />
 
+          <!-- Cover image -->
+          <img
+            v-if="event.coverImageUrl"
+            :src="event.coverImageUrl"
+            :alt="event.title"
+            class="mb-8 w-full rounded-xl border border-[var(--color-border)] object-cover"
+          />
+
           <!-- Description -->
           <div class="prose prose-sm max-w-none text-[var(--color-text-secondary)]">
             <p class="text-base leading-relaxed sm:text-lg">
               {{ event.description }}
             </p>
           </div>
+
+          <!-- Read the recap (past events with a linked recap post) -->
+          <UiBaseButton
+            v-if="recapPost"
+            variant="secondary"
+            size="md"
+            :href="`/blog/${recapPost.slug}`"
+            class="mt-8"
+          >
+            Read the recap
+            <svg
+              class="size-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </UiBaseButton>
 
           <!-- Tags -->
           <div v-if="event.tags.length" class="mt-8 flex flex-wrap gap-2" aria-label="Tags">
@@ -259,73 +288,6 @@ const relatedEvents = computed(() =>
                     {{ event.location }}
                   </span>
                 </div>
-              </div>
-            </UiBaseCard>
-
-            <!-- Capacity card (if applicable) -->
-            <UiBaseCard v-if="!isPast && event.capacity" padding="sm" flat>
-              <p
-                class="mb-4 font-mono text-[10px] uppercase tracking-[0.15em] text-[var(--color-text-muted)]"
-              >
-                Capacity
-              </p>
-
-              <div class="flex items-center gap-3">
-                <svg
-                  class="size-4 flex-shrink-0 text-[var(--color-text-muted)]"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  aria-hidden="true"
-                >
-                  <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                  <circle cx="9" cy="7" r="4" />
-                  <path d="M23 21v-2a4 4 0 00-3-3.87" />
-                  <path d="M16 3.13a4 4 0 010 7.75" />
-                </svg>
-                <span
-                  :class="[
-                    'font-mono text-sm font-medium',
-                    spotsUrgency === 'critical' ? 'text-red-500' : '',
-                    spotsUrgency === 'low' ? 'text-orange-500' : '',
-                    spotsUrgency === 'ok' || !spotsUrgency
-                      ? 'text-[var(--color-text-secondary)]'
-                      : '',
-                  ]"
-                >
-                  <template v-if="event.spotsLeft !== undefined">
-                    <span v-if="spotsUrgency === 'critical'"
-                      >Only {{ event.spotsLeft }} spots left!</span
-                    >
-                    <span v-else>{{ event.spotsLeft }} / {{ event.capacity }} spots available</span>
-                  </template>
-                  <template v-else> {{ event.capacity }} spots total </template>
-                </span>
-              </div>
-
-              <!-- Simple capacity bar -->
-              <div
-                v-if="event.spotsLeft !== undefined && event.capacity"
-                class="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-[var(--color-surface-overlay)]"
-                role="progressbar"
-                :aria-valuenow="event.capacity - event.spotsLeft"
-                :aria-valuemin="0"
-                :aria-valuemax="event.capacity"
-                :aria-label="`${event.capacity - event.spotsLeft} of ${event.capacity} spots filled`"
-              >
-                <div
-                  :class="[
-                    'h-full rounded-full transition-all duration-500',
-                    spotsUrgency === 'critical' ? 'bg-red-500' : '',
-                    spotsUrgency === 'low' ? 'bg-orange-500' : '',
-                    spotsUrgency === 'ok' ? 'bg-[var(--color-ieee-blue)]' : '',
-                    !spotsUrgency ? 'bg-[var(--color-ieee-blue)]' : '',
-                  ]"
-                  :style="{
-                    width: `${((event.capacity - event.spotsLeft) / event.capacity) * 100}%`,
-                  }"
-                />
               </div>
             </UiBaseCard>
 

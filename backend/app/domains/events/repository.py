@@ -53,3 +53,25 @@ async def get_next_upcoming(session: AsyncSession, *, now: datetime) -> Event | 
 async def get_by_slug(session: AsyncSession, *, slug: str) -> Event | None:
     result = await session.execute(select(Event).where(Event.slug == slug))
     return result.scalar_one_or_none()
+
+
+async def get_by_id(session: AsyncSession, *, event_id: int) -> Event | None:
+    return await session.get(Event, event_id)
+
+
+async def slug_exists(session: AsyncSession, *, slug: str, exclude_id: int | None = None) -> bool:
+    q = select(Event.id).where(Event.slug == slug)
+    if exclude_id is not None:
+        q = q.where(Event.id != exclude_id)
+    return (await session.execute(q)).first() is not None
+
+
+async def add(session: AsyncSession, event: Event) -> Event:
+    session.add(event)
+    await session.flush()
+    await session.refresh(event)
+    return event
+
+
+async def delete(session: AsyncSession, event: Event) -> None:
+    await session.delete(event)

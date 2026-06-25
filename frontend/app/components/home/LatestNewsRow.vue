@@ -5,20 +5,21 @@
  * Displays the 3 most recent blog posts as a card grid.
  * Shows branch activity and drives traffic to the blog.
  *
- * For V1, uses hardcoded dummy data.
- * TODO: Replace with `useFetch('/api/v1/posts?limit=3')` when API is ready.
+ * Fetches the 3 most recent posts from the API.
  */
 
-import { DUMMY_POSTS } from '~/composables/useBlog'
+import { useBlogApi } from '~/composables/useBlog'
 
-// ── Dummy data — replace with API call ───────────────────────
-const posts = DUMMY_POSTS.slice(0, 3)
+const { list } = useBlogApi()
+const { data } = await useAsyncData('home-latest-posts', () => list(null, 3))
+const posts = computed(() => data.value?.items ?? [])
 
 const { el, isVisible } = useReveal()
 </script>
 
 <template>
   <section
+    v-if="posts.length"
     class="bg-[var(--color-surface-raised)] py-20 sm:py-28"
     aria-labelledby="blog-section-heading"
   >

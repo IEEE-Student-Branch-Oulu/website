@@ -26,8 +26,8 @@
  */
 
 import {
-  DUMMY_EVENTS,
   EVENT_TYPE_META,
+  useEventsApi,
   type EventFilter,
   type EventItem,
   type EventType,
@@ -40,12 +40,17 @@ useSeoMeta({
   description: 'All IEEE Oulu workshops, tech talks, socials, and meetups — past and upcoming.',
 })
 
+// ── Data ───────────────────────────────────────────────────────
+const { list } = useEventsApi()
+const { data } = await useAsyncData('events', () => list())
+const events = computed<EventItem[]>(() => data.value?.items ?? [])
+
 // ── Filter state ───────────────────────────────────────────────
 const activeFilter = ref<EventFilter>('upcoming')
 
 // ── Computed: filtered + sorted events ────────────────────────
 const allEvents = computed<EventItem[]>(() =>
-  [...DUMMY_EVENTS].sort((a, b) => new Date(b.dateISO).getTime() - new Date(a.dateISO).getTime())
+  [...events.value].sort((a, b) => new Date(b.dateISO).getTime() - new Date(a.dateISO).getTime())
 )
 
 const filteredEvents = computed<EventItem[]>(() => {
@@ -68,9 +73,9 @@ const sortedFilteredEvents = computed<EventItem[]>(() => {
 
 // ── Counts for filter badges ───────────────────────────────────
 const counts = computed(() => ({
-  all: DUMMY_EVENTS.length,
-  upcoming: DUMMY_EVENTS.filter((e) => e.status === 'upcoming').length,
-  past: DUMMY_EVENTS.filter((e) => e.status === 'past').length,
+  all: events.value.length,
+  upcoming: events.value.filter((e) => e.status === 'upcoming').length,
+  past: events.value.filter((e) => e.status === 'past').length,
 }))
 
 // ── Visible section headings ───────────────────────────────────
